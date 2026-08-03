@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:;" />
+    <title>IELTS Writing Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-frame">
+      <div class="window-bar">
+        <div class="window-title"><span class="app-dot"></span>IELTS Writing Studio</div>
+        <div class="window-controls">
+          <button id="minimize-btn" aria-label="最小化">—</button>
+          <button id="maximize-btn" aria-label="最大化">□</button>
+          <button id="close-btn" class="close" aria-label="关闭">×</button>
+        </div>
+      </div>
+
+      <header class="exam-header">
+        <div class="brand">
+          <div class="brand-symbol">W</div>
+          <div>
+            <strong>IELTS Writing</strong>
+            <span>Computer-delivered practice</span>
+          </div>
+        </div>
+        <div class="session-label">
+          <span>Current practice</span>
+          <strong id="current-session-label">我的 IELTS 写作练习</strong>
+        </div>
+        <div class="timer-wrap" id="timer-wrap">
+          <div class="timer-icon">◷</div>
+          <div>
+            <span>Time left</span>
+            <strong id="timer-display">60:00</strong>
+          </div>
+          <button id="timer-toggle" class="small-dark-btn">Start</button>
+          <button id="timer-visibility" class="ghost-icon" aria-label="隐藏时间">◉</button>
+        </div>
+        <button id="save-btn" class="save-btn">
+          <span>✓</span>
+          保存练习
+        </button>
+        <button id="export-btn" class="export-btn">
+          <span class="export-icon">⇩</span>
+          导出 Word
+        </button>
+      </header>
+
+      <div class="content-grid">
+        <aside class="sidebar">
+          <div class="sidebar-section-title">
+            <span>我的练习</span>
+            <small>自动保存到本机</small>
+          </div>
+
+          <label class="project-name-field">
+            <span>练习名称</span>
+            <input id="project-title" type="text" value="我的 IELTS 写作练习" maxlength="80" />
+          </label>
+
+          <div class="task-setup-list">
+            <button class="task-setup-card" data-edit-task="task1" type="button">
+              <span class="setup-number">1</span>
+              <span class="setup-copy"><strong>Writing Task 1</strong><small id="task1-status">尚未添加题目</small></span>
+              <span class="setup-action">编辑</span>
+            </button>
+            <button class="task-setup-card" data-edit-task="task2" type="button">
+              <span class="setup-number">2</span>
+              <span class="setup-copy"><strong>Writing Task 2</strong><small id="task2-status">尚未添加题目</small></span>
+              <span class="setup-action">编辑</span>
+            </button>
+          </div>
+
+          <div class="sidebar-divider"></div>
+          <button id="customize-btn" class="outline-btn"><span>＋</span> 添加或编辑题目</button>
+          <button id="reset-btn" class="text-btn">清空全部题目、答案与计时</button>
+
+          <div class="privacy-card">
+            <div class="privacy-icon">✓</div>
+            <div>
+              <strong>纯写作模式</strong>
+              <p>无批改、无 AI、无自动纠错。题目与草稿会写入本机文件。</p>
+            </div>
+          </div>
+        </aside>
+
+        <main class="exam-workspace">
+          <section class="question-pane">
+            <div class="question-topline">
+              <div class="task-identity">
+                <span id="task-number" class="task-number">1</span>
+                <div>
+                  <span class="eyebrow">ACADEMIC WRITING</span>
+                  <h1 id="task-label">Writing Task 1</h1>
+                </div>
+              </div>
+              <span id="recommended-time" class="time-chip">20 min</span>
+            </div>
+
+            <div id="recommendation" class="recommendation">You should spend about 20 minutes on this task.</div>
+            <div id="question-copy" class="question-copy"></div>
+            <div id="question-visual" class="question-visual"></div>
+            <button id="empty-question-btn" class="empty-question hidden" type="button">
+              <span>＋</span>
+              <strong>添加 Task 1 题目</strong>
+              <small>可以只添加 Task 1 或 Task 2</small>
+            </button>
+          </section>
+
+          <section class="answer-pane">
+            <div class="answer-toolbar">
+              <div>
+                <span class="eyebrow">ANSWER SHEET</span>
+                <h2>Your answer</h2>
+              </div>
+              <div class="answer-stats">
+                <span id="save-state"><i></i> 已保存到本机</span>
+                <strong id="word-count">0 <small>words</small></strong>
+              </div>
+            </div>
+            <div class="editor-shell">
+              <textarea
+                id="answer-input"
+                aria-label="IELTS writing answer"
+                spellcheck="false"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="off"
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
+                data-ms-editor="false"
+              ></textarea>
+              <div class="editor-footer">
+                <span><b>✓</b> 自动纠错与拼写检查已关闭</span>
+                <span id="minimum-hint">Minimum 150 words</span>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="task-dock">
+        <div class="dock-spacer"></div>
+        <div class="task-tabs" role="tablist">
+          <button class="task-tab active" data-task="task1" role="tab" aria-selected="true">
+            <span class="tab-number">1</span>
+            <span class="tab-copy"><strong>Task 1</strong><small id="task1-count">0 words</small></span>
+          </button>
+          <button class="task-tab" data-task="task2" role="tab" aria-selected="false">
+            <span class="tab-number">2</span>
+            <span class="tab-copy"><strong>Task 2</strong><small id="task2-count">0 words</small></span>
+          </button>
+        </div>
+        <div class="dock-note">Drafts save automatically</div>
+      </footer>
+    </div>
+
+    <div id="question-modal" class="modal-backdrop hidden">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-heading">
+          <div><span>QUESTION BUILDER</span><h2 id="modal-title">添加或编辑题目</h2></div>
+          <button id="modal-close" aria-label="关闭">×</button>
+        </div>
+        <p>题目可以留空。导出 Word 时，没有题目的 Task 会自动跳过。</p>
+        <label>Writing Task 1 <small>可留空</small><textarea id="custom-task1" spellcheck="false" placeholder="在这里粘贴 Task 1 题目…"></textarea></label>
+
+        <section class="table-builder-section">
+          <div class="table-builder-heading">
+            <div><strong>Task 1 数据表格</strong><span>可选，适合表格题</span></div>
+            <button id="add-table" class="mini-outline-btn" type="button">＋ 添加表格</button>
+          </div>
+          <div id="table-builder" class="table-builder hidden">
+            <label class="table-title-field">表格标题<input id="table-title" type="text" placeholder="例如：Average weekly hours, 2025" /></label>
+            <div id="table-grid" class="table-grid"></div>
+            <div class="table-tools">
+              <button id="add-row" type="button">＋ 行</button>
+              <button id="add-column" type="button">＋ 列</button>
+              <button id="remove-row" type="button">－ 行</button>
+              <button id="remove-column" type="button">－ 列</button>
+              <button id="remove-table" class="remove-table" type="button">删除表格</button>
+            </div>
+            <p class="table-tip">表格会显示在题目下方，也会原样写入导出的 Word 文档。</p>
+          </div>
+        </section>
+
+        <label>Writing Task 2 <small>可留空</small><textarea id="custom-task2" spellcheck="false" placeholder="在这里粘贴 Task 2 题目…"></textarea></label>
+        <div class="modal-actions">
+          <button id="clear-prompts" class="secondary-btn">清空题目</button>
+          <button id="save-prompts" class="primary-btn">保存题目</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="confirm-modal" class="modal-backdrop hidden">
+      <section class="modal confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <div class="confirm-symbol">!</div>
+        <h2 id="confirm-title">清空全部练习？</h2>
+        <p>Task 1、Task 2 的题目、表格、答案和当前倒计时都会被清空。</p>
+        <div class="modal-actions centered">
+          <button id="cancel-reset" class="secondary-btn">取消</button>
+          <button id="confirm-reset" class="danger-btn">清空并重新开始</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="questions.js"></script>
+    <script src="renderer.js"></script>
+  </body>
+</html>

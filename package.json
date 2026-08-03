@@ -1,7 +1,11 @@
 {
-  "name": "site-creator-vinext-starter",
-  "version": "0.1.0",
+  "name": "ielts-writing-studio",
+  "productName": "IELTS Writing Studio",
+  "version": "0.2.0",
+  "description": "A polished IELTS computer-delivered writing practice desktop app with no grading or autocorrection.",
+  "author": "Jimmymario",
   "private": true,
+  "main": "desktop/main.cjs",
   "engines": {
     "node": ">=22.13.0"
   },
@@ -9,11 +13,35 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
+    "desktop": "electron desktop/main.cjs",
+    "desktop:pack": "electron-builder --projectDir desktop --win portable",
+    "desktop:pack:mac": "electron-builder --projectDir desktop --mac zip --x64 --arm64",
+    "desktop:sample-docx": "node desktop/generate-sample.cjs",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },
+  "build": {
+    "appId": "com.jimmymario.ieltswritingstudio",
+    "productName": "IELTS Writing Studio",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "desktop/**/*",
+      "node_modules/docx/**/*"
+    ],
+    "win": {
+      "icon": "desktop/assets/app-icon.ico",
+      "target": [
+        "portable"
+      ],
+      "artifactName": "IELTS-Writing-Studio-${version}-Portable.${ext}"
+    }
+  },
   "dependencies": {
+    "docx": "^9.7.1",
     "drizzle-orm": "0.45.2",
     "next": "16.2.6",
     "react": "19.2.6",
@@ -28,6 +56,8 @@
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.26",
     "drizzle-kit": "0.31.10",
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "react-server-dom-webpack": "19.2.6",

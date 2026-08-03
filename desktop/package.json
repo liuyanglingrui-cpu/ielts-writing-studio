@@ -1,0 +1,52 @@
+{
+  "name": "ielts-writing-studio-desktop",
+  "productName": "IELTS Writing Studio",
+  "version": "0.2.0",
+  "description": "A polished IELTS computer-delivered writing practice desktop app with no grading or autocorrection.",
+  "author": "Jimmymario",
+  "private": true,
+  "main": "main.cjs",
+  "dependencies": {
+    "docx": "9.7.1"
+  },
+  "devDependencies": {
+    "electron": "43.2.0"
+  },
+  "build": {
+    "appId": "com.jimmymario.ieltswritingstudio",
+    "productName": "IELTS Writing Studio",
+    "asar": true,
+    "compression": "store",
+    "directories": {
+      "output": "../release-v0.2"
+    },
+    "files": [
+      "assets/**/*",
+      "index.html",
+      "styles.css",
+      "questions.js",
+      "renderer.js",
+      "main.cjs",
+      "preload.cjs",
+      "docx-export.cjs",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/app-icon.ico",
+      "target": ["portable"],
+      "artifactName": "IELTS-Writing-Studio-${version}-Portable.${ext}"
+    },
+    "mac": {
+      "icon": "assets/app-icon.png",
+      "category": "public.app-category.education",
+      "identity": null,
+      "target": [
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "artifactName": "IELTS-Writing-Studio-${version}-macOS-${arch}.${ext}"
+    }
+  }
+}

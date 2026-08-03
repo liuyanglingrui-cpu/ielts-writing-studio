@@ -1,100 +1,62 @@
-# vinext-starter
+# IELTS Writing Studio
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+一个用于模拟 IELTS 机考写作界面的本地练习工具。它专注于计时和写作，不提供批改、拼写纠正或自动改写。
 
-## Prerequisites
+## 功能
 
-- Node.js `>=22.13.0`
+- Task 1 和 Task 2 均由用户自行添加题目，默认不内置题目
+- 可以只练习其中一个 Task
+- Task 1 支持创建、编辑和导出数据表格
+- 关闭拼写检查与自动纠错
+- 自动保存题目、表格、作文和倒计时到本地
+- 导出排版清晰的 `.docx`；没有题目的 Task 不会进入文档
+- Windows、Apple Silicon Mac 和 Intel Mac 桌面版本
 
-## Quick Start
+## 下载
+
+请前往 [Releases](https://github.com/liuyanglingrui-cpu/ielts-writing-studio/releases/latest) 下载对应平台的安装包。
+
+- Windows：`IELTS-Writing-Studio-0.2.0-Portable.exe`
+- Apple Silicon（M1/M2/M3/M4/M5）：文件名包含 `macOS-arm64-Fixed`
+- Intel Mac：文件名包含 `macOS-x64`
+
+macOS 版本目前没有 Apple Developer ID 签名。Apple Silicon 修复包内附“首次打开我.command”；首次运行时按住 Control 点击该文件并选择“打开”，成功后即可直接启动应用。
+
+## 本地开发
+
+需要 Node.js 22 或更高版本。
 
 ```bash
 npm install
-npm run dev
-npm run build
+npm run desktop
 ```
 
-This starter does not use `wrangler.jsonc`.
+生成 Windows 便携版：
 
-## Included Shape
-
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-Signed-in visitors receive both `oai-authenticated-user-id` and `oai-authenticated-user-email`. Private Sites require every visitor to sign in; public Sites may also have anonymous visitors, for whom neither header is present.
-
-The user ID is stable for the same user on the same Site and different across Sites. Email and name are intended for display or contact purposes.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const userId = requestHeaders.get("oai-authenticated-user-id");
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```bash
+npm run desktop:pack
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+生成 macOS 架构包：
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+```bash
+python desktop/package-macos.py arm64
+python desktop/package-macos.py x64
+```
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+## 数据与隐私
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+练习内容只保存在用户自己的电脑上。程序不包含联网批改功能，也不会自动上传作文。
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+Windows 本地数据通常位于：
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+```text
+%APPDATA%\IELTS Writing Studio\writing-practice.json
+```
 
-## Useful Commands
+## 项目结构
 
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+- `desktop/`：Electron 桌面应用、DOCX 导出器和打包脚本
+- `app/`：浏览器版本界面
+- `tests/`：网页构建测试
 
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)

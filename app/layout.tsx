@@ -14,17 +14,23 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "IELTS Writing Practice | 无自动纠错写作模拟器",
-  description: "A distraction-free IELTS computer-delivered writing practice interface with no grading or autocorrection.",
+  description:
+    "A distraction-free IELTS computer-delivered writing practice interface with no grading or autocorrection.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="zh-CN">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }
+

@@ -16,14 +16,12 @@ const defaultTasks: Record<TaskKey, PracticeTask> = {
   task1: {
     label: "Writing Task 1",
     recommendation: "You should spend about 20 minutes on this task.",
-    prompt:
-      "The chart below shows the percentage of households with access to the Internet in three different countries between 2000 and 2020.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    prompt: "",
   },
   task2: {
     label: "Writing Task 2",
     recommendation: "You should spend about 40 minutes on this task.",
-    prompt:
-      "Some people believe that university students should study whatever they like. Others think they should only be allowed to study subjects that will be useful in the future, such as science and technology.\n\nDiscuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    prompt: "",
   },
 };
 
